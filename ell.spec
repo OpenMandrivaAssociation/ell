@@ -40,8 +40,8 @@ Headers for developing against libell.
 
 %prep
 %autosetup -p1
-mkdir linux
-cp -p %{SOURCE1} linux/keyctl.h
+[ ! -d linux ] && mkdir linux
+cp -p -f %{SOURCE1} linux/keyctl.h
 
 %build
 %configure
