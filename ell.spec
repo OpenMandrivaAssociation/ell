@@ -5,7 +5,7 @@
 %global ldflags %{ldflags} -ldl
 
 Name:		ell
-Version:	0.26
+Version:	0.27
 Release:	1
 Summary:	Embedded Linux library
 License:	LGPLv2+
