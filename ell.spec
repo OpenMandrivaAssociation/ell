@@ -2,8 +2,6 @@
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 
-%global ldflags %{ldflags} -ldl
-
 Name:		ell
 Version:	0.27
 Release:	1
@@ -45,7 +43,7 @@ cp -p -f %{SOURCE1} linux/keyctl.h
 
 %build
 %configure
-%make_build V=1
+%make_build LDFLAGS="%{ldflags} -ldl"
 
 %install
 %make_install
