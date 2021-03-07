@@ -3,7 +3,7 @@
 %define develname %mklibname %{name} -d
 
 Name:		ell
-Version:	0.37
+Version:	0.38
 Release:	1
 Summary:	Embedded Linux library
 License:	LGPLv2+
@@ -43,7 +43,7 @@ cp -p -f %{SOURCE1} linux/keyctl.h
 
 %build
 %configure
-%make_build LDFLAGS="%{ldflags} -ldl"
+%make_build LDFLAGS="%{build_ldflags} -ldl"
 
 %install
 %make_install
