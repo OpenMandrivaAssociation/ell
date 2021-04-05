@@ -3,16 +3,14 @@
 %define develname %mklibname %{name} -d
 
 Name:		ell
-Version:	0.38
+Version:	0.39
 Release:	1
 Summary:	Embedded Linux library
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		https://01.org/ell
 Source0:	https://www.kernel.org/pub/linux/libs/ell/ell-%{version}.tar.xz
-
-# https://lore.kernel.org/lkml/20180924094723.487697-1-lkundrak@v3.sk/T/#u
-Source1:	https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/include/uapi/linux/keyctl.h?h=v4.6#/keyctl.h
+Patch0:		ell-0.39-fix-build-with-clang.patch
 
 %description
 The Embedded Linux* Library (ELL) provides core, low-level functionality for
@@ -38,8 +36,6 @@ Headers for developing against libell.
 
 %prep
 %autosetup -p1
-[ ! -d linux ] && mkdir linux
-cp -p -f %{SOURCE1} linux/keyctl.h
 
 %build
 %configure
