@@ -3,7 +3,7 @@
 %define develname %mklibname %{name} -d
 
 Name:		ell
-Version:	0.39
+Version:	0.40
 Release:	1
 Summary:	Embedded Linux library
 License:	LGPLv2+

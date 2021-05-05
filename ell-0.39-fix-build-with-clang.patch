@@ -1,13 +1,10 @@
-diff -up ell-0.39/ell/cert.c.omv~ ell-0.39/ell/cert.c
---- ell-0.39/ell/cert.c.omv~	2021-04-05 02:48:04.656548106 +0200
-+++ ell-0.39/ell/cert.c	2021-04-05 02:49:14.112975369 +0200
-@@ -435,6 +435,14 @@ static struct l_key *cert_try_link(struc
+diff -Naur a/ell/cert.c b/ell/cert.c
+--- a/ell/cert.c	2021-05-02 11:06:43.000000000 +0000
++++ b/ell/cert.c	2021-05-07 11:41:40.744866114 +0000
+@@ -437,6 +437,11 @@
  	return NULL;
  }
  
-+#define L_AUTO_CLEANUP_VAR(vartype,varname,destroy) \
-+	vartype varname __attribute__((cleanup(destroy)))
-+
 +static void cert_keyring_cleanup(struct l_keyring **p)
 +{
 +	l_keyring_free(*p);
@@ -16,7 +13,7 @@ diff -up ell-0.39/ell/cert.c.omv~ ell-0.39/ell/cert.c
  #define RETURN_ERROR(msg, args...)	\
  	do {	\
  		if (error) {	\
-@@ -449,7 +457,7 @@ LIB_EXPORT bool l_certchain_verify(struc
+@@ -451,7 +456,7 @@
  					const char **error)
  {
  	struct l_keyring *ca_ring = NULL;
@@ -25,3 +22,37 @@ diff -up ell-0.39/ell/cert.c.omv~ ell-0.39/ell/cert.c
  	struct l_cert *cert;
  	struct l_key *prev_key = NULL;
  	int verified = 0;
+diff -Naur a/ell/cert.h b/ell/cert.h
+--- a/ell/cert.h	2021-02-04 16:11:59.000000000 +0000
++++ b/ell/cert.h	2021-05-07 11:40:20.715226400 +0000
+@@ -73,6 +73,9 @@
+ 				unsigned int iter_count,
+ 				uint8_t *out_dk, size_t dk_len);
+ 
++#define L_AUTO_CLEANUP_VAR(vartype,varname,destroy) \
++       vartype varname __attribute__((cleanup(destroy)))
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff -Naur a/ell/tls.c b/ell/tls.c
+--- a/ell/tls.c	2021-05-02 11:06:43.000000000 +0000
++++ b/ell/tls.c	2021-05-07 11:45:48.563653551 +0000
+@@ -1888,11 +1888,16 @@
+ 			"ServerHello decode error");
+ }
+ 
++static void certchain_cleanup(struct l_certchain **p)
++{
++	l_certchain_free(*p);
++}
++
+ static void tls_handle_certificate(struct l_tls *tls,
+ 					const uint8_t *buf, size_t len)
+ {
+ 	size_t total;
+-	_auto_(l_certchain_free) struct l_certchain *certchain = NULL;
++	L_AUTO_CLEANUP_VAR(struct l_certchain *, certchain, certchain_cleanup) = NULL;
+ 	struct l_cert *leaf;
+ 	size_t der_len;
+ 	const uint8_t *der;
