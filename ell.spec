@@ -4,7 +4,7 @@
 
 Name:		ell
 Version:	0.40
-Release:	1
+Release:	2
 Summary:	Embedded Linux library
 License:	LGPLv2+
 Group:		System/Libraries
