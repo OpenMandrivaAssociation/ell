@@ -2,10 +2,10 @@
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 
+Summary:	Embedded Linux library
 Name:		ell
 Version:	0.40
-Release:	2
-Summary:	Embedded Linux library
+Release:	3
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		https://01.org/ell
