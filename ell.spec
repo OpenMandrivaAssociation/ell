@@ -4,13 +4,13 @@
 
 Summary:	Embedded Linux library
 Name:		ell
-Version:	0.41
+Version:	0.42
 Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		https://01.org/ell
 Source0:	https://www.kernel.org/pub/linux/libs/ell/ell-%{version}.tar.xz
-Patch0:		ell-0.39-fix-build-with-clang.patch
+Patch0:		0000-fix-build-with-LLVM-clang.patch
 
 %description
 The Embedded Linux* Library (ELL) provides core, low-level functionality for

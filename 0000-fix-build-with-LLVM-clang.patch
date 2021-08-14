@@ -1,0 +1,75 @@
+From d4cdaa0030e29a71c4163436414bed4b4fc46944 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tomasz=20Pawe=C5=82=20Gajc?= <tpgxyz@gmail.com>
+Date: Sat, 14 Aug 2021 10:44:36 +0200
+Subject: [PATCH] fix build with LLVM/clang
+
+---
+ ell/cert.c   | 7 ++++++-
+ ell/tls.c    | 7 ++++++-
+ ell/useful.h | 3 +++
+ 3 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/ell/cert.c b/ell/cert.c
+index 141ea1c..9b5b40e 100644
+--- a/ell/cert.c
++++ b/ell/cert.c
+@@ -437,6 +437,11 @@ static struct l_key *cert_try_link(struct l_cert *cert, struct l_keyring *ring)
+ 	return NULL;
+ }
+ 
++static void cert_keyring_cleanup(struct l_keyring **p)
++{
++       l_keyring_free(*p);
++}
++
+ #define RETURN_ERROR(msg, args...)	\
+ 	do {	\
+ 		if (error) {	\
+@@ -451,7 +456,7 @@ LIB_EXPORT bool l_certchain_verify(struct l_certchain *chain,
+ 					const char **error)
+ {
+ 	struct l_keyring *ca_ring = NULL;
+-	_auto_(l_keyring_free) struct l_keyring *verify_ring = NULL;
++	L_AUTO_CLEANUP_VAR(struct l_keyring *, verify_ring, cert_keyring_cleanup) = NULL;
+ 	struct l_cert *cert;
+ 	struct l_key *prev_key = NULL;
+ 	int verified = 0;
+diff --git a/ell/tls.c b/ell/tls.c
+index c246f1f..e5496b1 100644
+--- a/ell/tls.c
++++ b/ell/tls.c
+@@ -1888,11 +1888,16 @@ decode_error:
+ 			"ServerHello decode error");
+ }
+ 
++static void certchain_cleanup(struct l_certchain **p)
++{
++       l_certchain_free(*p);
++}
++
+ static void tls_handle_certificate(struct l_tls *tls,
+ 					const uint8_t *buf, size_t len)
+ {
+ 	size_t total;
+-	_auto_(l_certchain_free) struct l_certchain *certchain = NULL;
++	L_AUTO_CLEANUP_VAR(struct l_certchain *, certchain, certchain_cleanup) = NULL;
+ 	struct l_cert *leaf;
+ 	size_t der_len;
+ 	const uint8_t *der;
+diff --git a/ell/useful.h b/ell/useful.h
+index d696bc3..b75c2fa 100644
+--- a/ell/useful.h
++++ b/ell/useful.h
+@@ -70,6 +70,9 @@ static inline unsigned char bit_field(const unsigned char oct,
+ #define _auto_(func)					\
+ 	_AUTODESTRUCT(__COUNTER__, func)
+ 
++#define L_AUTO_CLEANUP_VAR(vartype,varname,destroy)	\
++	vartype varname __attribute__((cleanup(destroy)))
++
+ /*
+  * Trick the compiler into thinking that var might be changed somehow by
+  * the asm
+-- 
+2.33.0.rc2
+
