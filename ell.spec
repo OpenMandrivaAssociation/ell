@@ -4,7 +4,7 @@
 
 Summary:	Embedded Linux library
 Name:		ell
-Version:	0.42
+Version:	0.43
 Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
@@ -38,12 +38,14 @@ Headers for developing against libell.
 %autosetup -p1
 
 %build
+# FIXME as of ell 0.43, clang 13, the __start___ell_debug hack doesn't work
+# with clang
+CC=gcc CXX=g++ \
 %configure
 %make_build LDFLAGS="%{build_ldflags} -ldl"
 
 %install
 %make_install
-find %{buildroot} -type f -name "*.la" -delete
 
 %files -n %{libname}
 %{_libdir}/libell.so.%{major}*
