@@ -2,15 +2,17 @@
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 
+# (tpg) 2021-11-10 ld.lld: error: undefined symbol: __start___ell_debug
+%global optflags %{optflags} -fuse-ld=bfd
+
 Summary:	Embedded Linux library
 Name:		ell
-Version:	0.44
+Version:	0.45
 Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		https://01.org/ell
 Source0:	https://www.kernel.org/pub/linux/libs/ell/ell-%{version}.tar.xz
-Patch0:		0000-fix-build-with-LLVM-clang.patch
 
 %description
 The Embedded Linux* Library (ELL) provides core, low-level functionality for
@@ -38,9 +40,6 @@ Headers for developing against libell.
 %autosetup -p1
 
 %build
-# FIXME as of ell 0.43, clang 13, the __start___ell_debug hack doesn't work
-# with clang
-CC=gcc CXX=g++ \
 %configure
 %make_build LDFLAGS="%{build_ldflags} -ldl"
 
