@@ -2,12 +2,9 @@
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 
-# (tpg) 2021-11-10 ld.lld: error: undefined symbol: __start___ell_debug
-%global optflags %{optflags} -fuse-ld=bfd
-
 Summary:	Embedded Linux library
 Name:		ell
-Version:	0.48
+Version:	0.50
 Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
