@@ -1,11 +1,12 @@
 %define major 0
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
+%global optflags %{optflags} -Oz
 
 Summary:	Embedded Linux library
 Name:		ell
-Version:	0.56
-Release:	2
+Version:	0.57
+Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		https://01.org/ell
