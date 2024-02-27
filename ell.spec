@@ -5,7 +5,7 @@
 
 Summary:	Embedded Linux library
 Name:		ell
-Version:	0.62
+Version:	0.63
 Release:	1
 License:	LGPLv2+
 Group:		System/Libraries
