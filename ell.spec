@@ -12,6 +12,11 @@ Group:		System/Libraries
 URL:		https://01.org/ell
 Source0:	https://www.kernel.org/pub/linux/libs/ell/ell-%{version}.tar.xz
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 %description
 The Embedded Linux* Library (ELL) provides core, low-level functionality for
 system daemons. It typically has no dependencies other than the Linux kernel, C
